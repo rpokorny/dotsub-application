@@ -1,4 +1,4 @@
-package pokorny.ross;
+package pokorny.ross.dotsub;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
