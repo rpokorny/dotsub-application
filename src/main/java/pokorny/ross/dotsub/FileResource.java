@@ -10,6 +10,8 @@ import java.time.Instant;
 import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 
+import java.sql.Timestamp;
+
 import javax.inject.Inject;
 
 import javax.ws.rs.Path;
@@ -26,6 +28,9 @@ import org.springframework.stereotype.Component;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import pokorny.ross.dotsub.jooq.tables.interfaces.IFileMetadata;
+import pokorny.ross.dotsub.jooq.tables.pojos.FileMetadata;
+
 /**
  * This class defines the REST endpoints for the application.
  */
@@ -34,21 +39,21 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Produces("application/json")
 public class FileResource {
 
-    private final FileRepository db;
+    private final FileService service;
 
     @Inject
-    public FileResource(FileRepository db) {
-        this.db = db;
+    public FileResource(FileService service) {
+        this.service = service;
     }
 
     @GET
-    public Collection<FileMetadata> listFiles() {
-        return db.list();
+    public Collection<IFileMetadata> listFiles() {
+        return service.list();
     }
 
     @POST
     @Consumes("multipart/form-data")
-    public FileMetadata uploadFile(
+    public IFileMetadata uploadFile(
             @FormDataParam("file") FormDataBodyPart fileData,
             @FormDataParam("title") String title,
             @FormDataParam("description") String description,
@@ -64,10 +69,14 @@ public class FileResource {
             throw new IllegalArgumentException("Invalid ISO Date: " + isoDateStr, e);
         }
 
-        FileMetadata fileMetadata =
-            new FileMetadata(title, description, mediaType, creationDate);
+        IFileMetadata fileMetadata = new FileMetadata(
+                null, //no id yet; database will assign
+                title,
+                description,
+                mediaType.toString(),
+                Timestamp.from(creationDate));
 
-        db.save(fileMetadata, file);
+        service.save(fileMetadata, file);
 
         return fileMetadata;
     }
@@ -80,8 +89,8 @@ public class FileResource {
     @Path("/{uuid}")
     public Response getFileContents(@PathParam("uuid") UUID uuid) {
         //will throw IllegalArgumentException if not found
-        FileMetadata metadata = db.getMetadataById(uuid);
-        File file = db.getFileById(uuid);
+        IFileMetadata metadata = service.getMetadataById(uuid);
+        File file = service.getFileById(uuid);
 
         return Response.ok(file, metadata.getMediaType()).build();
     }

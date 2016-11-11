@@ -6,18 +6,20 @@ import java.util.UUID;
 import java.io.File;
 import java.io.IOException;
 
-public interface FileRepository {
+import pokorny.ross.dotsub.jooq.tables.interfaces.IFileMetadata;
+
+public interface FileService {
     /**
      * @return metadata about every file in the system
      */
-    public Collection<FileMetadata> list();
+    public Collection<IFileMetadata> list();
 
     /**
      * Save a file.
      * @param metadata The file's metadata
      * @param file The contents of the file
      */
-    public void save(FileMetadata metadata, byte[] file) throws IOException;
+    public void save(IFileMetadata metadata, byte[] file) throws IOException;
 
 
     /**
@@ -34,5 +36,5 @@ public interface FileRepository {
      * @return metadata for the file
      * @throws IllegalArgumentException if the id does not match any existing metadata
      */
-    public FileMetadata getMetadataById(UUID id);
+    public IFileMetadata getMetadataById(UUID id);
 }
