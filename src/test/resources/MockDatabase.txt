@@ -1,0 +1,8 @@
+# This file is read in by jooq's MockFileDatabase.  It includes pairings of
+# SQL queries to the result sets they should return
+
+select "FILE_METADATA"."ID", "FILE_METADATA"."TITLE", "FILE_METADATA"."DESCRIPTION", "FILE_METADATA"."MEDIA_TYPE", "FILE_METADATA"."CREATION_DATE" from "FILE_METADATA" order by "FILE_METADATA"."TITLE" asc;
+> ID                                   TITLE      DESCRIPTION MEDIA_TYPE       CREATION_DATE
+> ------------------------------------ ---------- ----------- ---------------- -------------
+> ed6f7aae-4714-45ca-981f-938ff42718f6 Test Title descrsrsrsr text/csv           {null}
+> 5a9b5011-3e2b-4155-be47-bdf1c03a0447 Test2Title {null}      application/json   {null}
