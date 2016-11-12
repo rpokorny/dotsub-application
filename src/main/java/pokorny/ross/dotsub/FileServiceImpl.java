@@ -30,7 +30,7 @@ import static pokorny.ross.dotsub.jooq.Tables.FILE_METADATA;
  * metadata storage and filesystem persistence for file data
  */
 @Service
-public class FileServiceImpl {
+public class FileServiceImpl implements FileService {
     private final DSLContext jooq;
 
     private final String filePersistenceDirectory;

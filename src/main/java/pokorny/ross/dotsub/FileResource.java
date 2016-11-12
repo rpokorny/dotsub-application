@@ -1,5 +1,6 @@
 package pokorny.ross.dotsub;
 
+import java.util.Collections;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -48,7 +49,7 @@ public class FileResource {
 
     @GET
     public Collection<IFileMetadata> listFiles() {
-        return service.list();
+        return Collections.unmodifiableCollection(service.list());
     }
 
     @POST

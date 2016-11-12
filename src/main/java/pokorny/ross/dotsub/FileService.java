@@ -12,7 +12,7 @@ public interface FileService {
     /**
      * @return metadata about every file in the system
      */
-    public Collection<IFileMetadata> list();
+    public Collection<? extends IFileMetadata> list();
 
     /**
      * Save a file.
