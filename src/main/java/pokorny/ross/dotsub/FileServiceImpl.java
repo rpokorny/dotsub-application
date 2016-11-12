@@ -1,17 +1,12 @@
 package pokorny.ross.dotsub;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.UUID;
 
 import java.io.File;
 import java.io.IOException;
 
-import java.nio.file.Paths;
 import java.nio.file.Path;
-import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
 import javax.inject.Inject;
@@ -32,19 +27,22 @@ import static pokorny.ross.dotsub.jooq.Tables.FILE_METADATA;
 @Service
 public class FileServiceImpl implements FileService {
     private final DSLContext jooq;
+    private final NioWrapper nioWrapper;
 
     private final String filePersistenceDirectory;
 
     @Inject
     public FileServiceImpl(
             @Value("${filePersistenceDirectory}") String filePersistenceDirectory,
-            DSLContext jooq) {
+            DSLContext jooq,
+            NioWrapper nioWrapper) {
         this.filePersistenceDirectory = filePersistenceDirectory;
         this.jooq = jooq;
+        this.nioWrapper = nioWrapper;
     }
 
     private Path getPathById(UUID id) {
-        return Paths.get(filePersistenceDirectory, id.toString());
+        return nioWrapper.get(filePersistenceDirectory, id.toString());
     }
 
     /**
@@ -69,7 +67,7 @@ public class FileServiceImpl implements FileService {
 
         //save the file itself on a path generated using the UUID
         Path filePath = getPathById(id);
-        Files.write(filePath, bytes,
+        nioWrapper.write(filePath, bytes,
             StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
     }
 
