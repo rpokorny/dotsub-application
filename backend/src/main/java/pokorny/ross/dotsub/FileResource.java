@@ -68,6 +68,7 @@ public class FileResource {
             @FormDataParam("creationDate") String isoDateStr) throws IOException {
         byte[] file = fileData.getValueAs(byte[].class);
         MediaType mediaType = fileData.getMediaType();
+        String filename = fileData.getContentDisposition().getFileName();
         Instant creationDate;
 
         try {
@@ -82,7 +83,8 @@ public class FileResource {
                 title,
                 description,
                 mediaType.toString(),
-                Timestamp.from(creationDate));
+                filename,
+                null);
 
         return new FileMetadataRepresentation(service.save(fileMetadata, file), uriInfo);
     }
@@ -98,6 +100,9 @@ public class FileResource {
         IFileMetadata metadata = service.getMetadataById(uuid);
         File file = service.getFileById(uuid);
 
-        return Response.ok(file, metadata.getMediaType()).build();
+        return Response.ok(file, metadata.getMediaType())
+            .header("Content-Disposition",
+                    "attachment; filename=\"" + metadata.getFilename() + '"')
+            .build();
     }
 }

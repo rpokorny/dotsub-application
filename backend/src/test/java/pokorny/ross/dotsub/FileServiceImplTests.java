@@ -62,6 +62,7 @@ public class FileServiceImplTests {
         assertEquals("Test Title", metadata.getTitle());
         assertEquals("descrsrsrsr", metadata.getDescription());
         assertEquals("text/csv", metadata.getMediaType());
+        assertEquals("test.csv", metadata.getFilename());
 
         //unfortunately the jooq mocking tools do not appear to support dates
         assertNull(metadata.getCreationDate());
@@ -72,6 +73,7 @@ public class FileServiceImplTests {
         assertEquals("Test2Title", metadata.getTitle());
         assertNull(metadata.getDescription());
         assertEquals("application/json", metadata.getMediaType());
+        assertEquals("test.json", metadata.getFilename());
         assertNull(metadata.getCreationDate());
     }
 
@@ -84,7 +86,8 @@ public class FileServiceImplTests {
             "title",
             "description",
             "text/plain",
-            new Timestamp(1l));
+            "bio.txt",
+            null);
 
         //file contents
         byte[] deadbeef = {(byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF};
@@ -135,7 +138,7 @@ public class FileServiceImplTests {
         assertEquals("title", retval.getTitle());
         assertEquals("description", retval.getDescription());
         assertEquals("text/plain", retval.getMediaType());
-        assertEquals(new Timestamp(1), retval.getCreationDate());
+        assertEquals("bio.txt", retval.getFilename());
     }
 
     @Test
@@ -202,6 +205,7 @@ public class FileServiceImplTests {
         assertEquals("titletitle", retval.getTitle());
         assertEquals("description", retval.getDescription());
         assertEquals("application/xhtml+xml", retval.getMediaType());
+        assertEquals("test.xhtml", retval.getFilename());
     }
 
     @Test(expected=NoSuchElementException.class)

@@ -39,6 +39,7 @@ public class FileMetadataRepresentation extends FileMetadata {
             metadata.getTitle(),
             metadata.getDescription(),
             metadata.getMediaType(),
+            metadata.getFilename(),
             metadata.getCreationDate()
         );
 
