@@ -101,7 +101,7 @@ public class FileResourceTests {
         FileResource resource = new FileResource(mockService);
 
         FileMetadataRepresentation retval =
-            resource.uploadFile(mockUriInfo, formDataMock, title, description, creationDateStr);
+            resource.uploadFile(mockUriInfo, formDataMock, title, description);
 
         assertEquals(title, retval.getTitle());
         assertEquals(description, retval.getDescription());
@@ -123,28 +123,7 @@ public class FileResourceTests {
         assertEquals(title, captured.getTitle());
         assertEquals(description, captured.getDescription());
         assertEquals("image/png", captured.getMediaType());
-        assertEquals(expectedTimestamp, captured.getCreationDate());
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testUploadFileInvalidDate() throws IOException {
-        byte[] deadbeef = {(byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF};
-        String creationDateStr = "2016-11-asdf12T00:31:50Z";
-        String title = "test title";
-        String description = "test description";
-        MediaType mediaType = new MediaType("image", "png");
-
-        FormDataBodyPart formDataMock = mock(FormDataBodyPart.class);
-        when(formDataMock.getValueAs(byte[].class)).thenReturn(deadbeef);
-        when(formDataMock.getMediaType()).thenReturn(mediaType);
-
-        FileService mockService = mock(FileService.class);
-        UriInfo mockUriInfo = mock(UriInfo.class);
-
-        FileResource resource = new FileResource(mockService);
-
-        //should throw exception due to invalid date string
-        resource.uploadFile(mockUriInfo, formDataMock, title, description, creationDateStr);
+        assertEquals(filename, captured.getFilename());
     }
 
     @Test

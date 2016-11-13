@@ -64,19 +64,11 @@ public class FileResource {
             @Context UriInfo uriInfo,
             @FormDataParam("file") FormDataBodyPart fileData,
             @FormDataParam("title") String title,
-            @FormDataParam("description") String description,
-            @FormDataParam("creationDate") String isoDateStr) throws IOException {
+            @FormDataParam("description") String description) throws IOException {
         byte[] file = fileData.getValueAs(byte[].class);
         MediaType mediaType = fileData.getMediaType();
         String filename = fileData.getContentDisposition().getFileName();
         Instant creationDate;
-
-        try {
-            creationDate = Instant.from(DateTimeFormatter.ISO_INSTANT.parse(isoDateStr));
-        }
-        catch (DateTimeException e) {
-            throw new IllegalArgumentException("Invalid ISO Date: " + isoDateStr, e);
-        }
 
         IFileMetadata fileMetadata = new FileMetadata(
                 null, //no id yet; database will assign
