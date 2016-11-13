@@ -9,8 +9,12 @@ import java.sql.Timestamp;
 import java.io.File;
 import java.io.IOException;
 
+import java.net.URI;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -29,20 +33,37 @@ import pokorny.ross.dotsub.jooq.tables.pojos.FileMetadata;
 public class FileResourceTests {
     @Test
     public void testListFiles() {
-        ArrayList<IFileMetadata> collection = new ArrayList();
-        collection.add(new FileMetadata(null, null, null, null, null));
+        UUID id = UUID.fromString("e3ca88f1-4d11-40d4-8d07-0676680588d6");
+
+        ArrayList<IFileMetadata> collection = new ArrayList<IFileMetadata>();
+        collection.add(new FileMetadata(id, "title", "desc", "text/plain", new Timestamp(0)));
 
         FileService mockService = mock(FileService.class);
         when(mockService.list()).thenAnswer(i -> collection);
 
+        UriInfo mockUriInfo = mock(UriInfo.class);
+        when(mockUriInfo.getBaseUriBuilder())
+            .thenReturn(UriBuilder.fromPath("https://test-domain:8000/asdf/test"));
+
         FileResource resource = new FileResource(mockService);
 
-        Collection<IFileMetadata> retval = resource.listFiles();
+        Collection<FileMetadataRepresentation> retval = resource.listFiles(mockUriInfo);
 
         //check that the returned collection has the same elements as the
         //collection returned by the service
         assertEquals(retval.size(), 1);
-        assertSame(retval.iterator().next(), collection.get(0));
+
+        FileMetadataRepresentation rep = retval.iterator().next();
+
+        assertEquals(id, rep.getId());
+        assertEquals("title", rep.getTitle());
+        assertEquals("desc", rep.getDescription());
+        assertEquals("text/plain", rep.getMediaType());
+        assertEquals(new Timestamp(0), rep.getCreationDate());
+        assertEquals(
+            "https://test-domain:8000/asdf/test/file/e3ca88f1-4d11-40d4-8d07-0676680588d6",
+            rep.getHref().toString()
+        );
     }
 
     @Test
@@ -53,6 +74,7 @@ public class FileResourceTests {
         String title = "test title";
         String description = "test description";
         MediaType mediaType = new MediaType("image", "png");
+        UUID id = UUID.fromString("ca51227c-695d-4564-a8af-34f6e01d28c8");
 
         FormDataBodyPart formDataMock = mock(FormDataBodyPart.class);
         when(formDataMock.getValueAs(byte[].class)).thenReturn(deadbeef);
@@ -60,15 +82,25 @@ public class FileResourceTests {
 
         FileService mockService = mock(FileService.class);
 
+        when(mockService.save(any(FileMetadata.class), any(byte[].class))).thenReturn(
+                new FileMetadata(id, title, description, "image/png", expectedTimestamp));
+
+        UriInfo mockUriInfo = mock(UriInfo.class);
+        when(mockUriInfo.getBaseUriBuilder())
+            .thenReturn(UriBuilder.fromPath("http://test-domain/test"));
+
+
         FileResource resource = new FileResource(mockService);
 
-        IFileMetadata retval =
-            resource.uploadFile(formDataMock, title, description, creationDateStr);
+        FileMetadataRepresentation retval =
+            resource.uploadFile(mockUriInfo, formDataMock, title, description, creationDateStr);
 
-        assertEquals(retval.getTitle(), title);
-        assertEquals(retval.getDescription(), description);
-        assertEquals(retval.getMediaType(), "image/png");
-        assertEquals(retval.getCreationDate(), expectedTimestamp);
+        assertEquals(title, retval.getTitle());
+        assertEquals(description, retval.getDescription());
+        assertEquals("image/png", retval.getMediaType());
+        assertEquals(expectedTimestamp, retval.getCreationDate());
+        assertEquals("http://test-domain/test/file/ca51227c-695d-4564-a8af-34f6e01d28c8",
+                retval.getHref().toString());
 
         ArgumentCaptor<IFileMetadata> metadataCaptor =
             ArgumentCaptor.forClass(IFileMetadata.class);
@@ -78,10 +110,11 @@ public class FileResourceTests {
             .save(metadataCaptor.capture(), eq(deadbeef));
 
         IFileMetadata captured = metadataCaptor.getValue();
-        assertEquals(captured.getTitle(), title);
-        assertEquals(captured.getDescription(), description);
-        assertEquals(captured.getMediaType(), "image/png");
-        assertEquals(captured.getCreationDate(), expectedTimestamp);
+
+        assertEquals(title, captured.getTitle());
+        assertEquals(description, captured.getDescription());
+        assertEquals("image/png", captured.getMediaType());
+        assertEquals(expectedTimestamp, captured.getCreationDate());
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -97,11 +130,12 @@ public class FileResourceTests {
         when(formDataMock.getMediaType()).thenReturn(mediaType);
 
         FileService mockService = mock(FileService.class);
+        UriInfo mockUriInfo = mock(UriInfo.class);
 
         FileResource resource = new FileResource(mockService);
 
         //should throw exception due to invalid date string
-        resource.uploadFile(formDataMock, title, description, creationDateStr);
+        resource.uploadFile(mockUriInfo, formDataMock, title, description, creationDateStr);
     }
 
     @Test

@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Collection;
 import java.util.UUID;
 
+import java.util.stream.Collectors;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -23,6 +25,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 
@@ -48,13 +52,16 @@ public class FileResource {
     }
 
     @GET
-    public Collection<IFileMetadata> listFiles() {
-        return Collections.unmodifiableCollection(service.list());
+    public Collection<FileMetadataRepresentation> listFiles(@Context final UriInfo uriInfo) {
+        return service.list().stream()
+            .map(fm -> new FileMetadataRepresentation(fm, uriInfo))
+            .collect(Collectors.toList());
     }
 
     @POST
     @Consumes("multipart/form-data")
-    public IFileMetadata uploadFile(
+    public FileMetadataRepresentation uploadFile(
+            @Context UriInfo uriInfo,
             @FormDataParam("file") FormDataBodyPart fileData,
             @FormDataParam("title") String title,
             @FormDataParam("description") String description,
@@ -77,9 +84,7 @@ public class FileResource {
                 mediaType.toString(),
                 Timestamp.from(creationDate));
 
-        service.save(fileMetadata, file);
-
-        return fileMetadata;
+        return new FileMetadataRepresentation(service.save(fileMetadata, file), uriInfo);
     }
 
     /**

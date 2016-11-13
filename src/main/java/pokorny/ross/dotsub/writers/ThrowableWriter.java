@@ -56,7 +56,7 @@ public class ThrowableWriter implements MessageBodyWriter<Throwable> {
             MediaType mediaType,
             MultivaluedMap<String,Object> httpHeaders,
             OutputStream entityStream) throws JsonProcessingException, IOException {
-        Map<String, Object> jsonMap = new HashMap(2);
+        Map<String, Object> jsonMap = new HashMap<String, Object>(2);
 
         Optional<String> optMessage = Optional.ofNullable(t.getMessage());
         if (!optMessage.isPresent()) {

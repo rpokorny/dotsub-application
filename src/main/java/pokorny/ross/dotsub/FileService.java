@@ -16,10 +16,12 @@ public interface FileService {
 
     /**
      * Save a file.
-     * @param metadata The file's metadata
+     * @param metadata The file's metadata.  This metadata should not have an id set
      * @param file The contents of the file
+     * @return a IFileMetadata containing the file's information including an id as
+     * set by the database.
      */
-    public void save(IFileMetadata metadata, byte[] file) throws IOException;
+    public IFileMetadata save(IFileMetadata metadata, byte[] file) throws IOException;
 
 
     /**

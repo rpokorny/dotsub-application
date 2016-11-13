@@ -19,7 +19,7 @@ public class NioWrapper {
         return Files.write(path, bytes, options);
     }
 
-    public Path get(String first, String... more) {
+    public Path getPath(String first, String... more) {
         return Paths.get(first, more);
     }
 }

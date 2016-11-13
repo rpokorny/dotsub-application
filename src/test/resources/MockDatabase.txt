@@ -6,3 +6,16 @@ select "FILE_METADATA"."ID", "FILE_METADATA"."TITLE", "FILE_METADATA"."DESCRIPTI
 > ------------------------------------ ---------- ----------- ---------------- -------------
 > ed6f7aae-4714-45ca-981f-938ff42718f6 Test Title descrsrsrsr text/csv           {null}
 > 5a9b5011-3e2b-4155-be47-bdf1c03a0447 Test2Title {null}      application/json   {null}
+@ rows: 2
+
+insert into "FILE_METADATA" ("TITLE", "DESCRIPTION", "MEDIA_TYPE", "CREATION_DATE") values (?, ?, ?, ?);
+> ID
+> ------------------------------------
+> a25a0408-3526-4de8-82ee-7a74be2c3314
+@ rows: 1
+
+select "FILE_METADATA"."ID", "FILE_METADATA"."TITLE", "FILE_METADATA"."DESCRIPTION", "FILE_METADATA"."MEDIA_TYPE", "FILE_METADATA"."CREATION_DATE" from "FILE_METADATA" where "FILE_METADATA"."ID" = ?;
+> ID                                   TITLE      DESCRIPTION MEDIA_TYPE            CREATION_DATE
+> ------------------------------------ ---------- ----------- --------------------- -------------
+> bd257178-7827-476a-91fb-e1ab1e8400f0 titletitle description application/xhtml+xml {null}
+@rows: 1

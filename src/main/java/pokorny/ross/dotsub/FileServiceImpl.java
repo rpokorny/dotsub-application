@@ -2,6 +2,7 @@ package pokorny.ross.dotsub;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.NoSuchElementException;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class FileServiceImpl implements FileService {
     }
 
     private Path getPathById(UUID id) {
-        return nioWrapper.get(filePersistenceDirectory, id.toString());
+        return nioWrapper.getPath(filePersistenceDirectory, id.toString());
     }
 
     /**
@@ -57,7 +58,7 @@ public class FileServiceImpl implements FileService {
      * @param metadata The file's metadata
      * @param file The contents of the file
      */
-    public void save(IFileMetadata metadata, byte[] bytes) throws IOException {
+    public IFileMetadata save(IFileMetadata metadata, byte[] bytes) throws IOException {
         //save the metadata in the database
         FileMetadataRecord record = jooq.newRecord(FILE_METADATA, metadata);
         record.store();
@@ -69,6 +70,8 @@ public class FileServiceImpl implements FileService {
         Path filePath = getPathById(id);
         nioWrapper.write(filePath, bytes,
             StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+
+        return record;
     }
 
 
@@ -76,14 +79,14 @@ public class FileServiceImpl implements FileService {
      * Gets a File object for a file with the referenced id
      * @param id The id of the file
      * @return a File
-     * @throws IllegalArgumentException if the id does not match an existing file
+     * @throws NoSuchElementException if the id does not match an existing file
      */
     public File getFileById(UUID id) {
         File file = getPathById(id).toFile();
 
-        //checks for existance and readability
+        //checks for existence and readability
         if (!file.canRead()) {
-            throw new IllegalArgumentException("No readable file found for id: " + id);
+            throw new NoSuchElementException("No readable file found for id: " + id);
         }
 
         return file;
@@ -93,7 +96,7 @@ public class FileServiceImpl implements FileService {
      * Gets the metadata for a file with the referenced id
      * @param id The id of the file
      * @return metadata for the file
-     * @throws IllegalArgumentException if the id does not match any existing metadata
+     * @throws NoSuchElementException if the id does not match any existing metadata
      */
     public IFileMetadata getMetadataById(UUID id) {
         IFileMetadata metadata = jooq.selectFrom(FILE_METADATA)
@@ -101,7 +104,7 @@ public class FileServiceImpl implements FileService {
             .fetchOne();
 
         if (metadata == null) {
-            throw new IllegalArgumentException("No metadata found for id: " + id);
+            throw new NoSuchElementException("No metadata found for id: " + id);
         }
         else {
             return metadata;
