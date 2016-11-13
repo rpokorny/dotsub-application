@@ -40,6 +40,17 @@ public class FileServiceImpl implements FileService {
         this.filePersistenceDirectory = filePersistenceDirectory;
         this.jooq = jooq;
         this.nioWrapper = nioWrapper;
+
+        try {
+            createDirectories();
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not initialize FileService", e);
+        }
+    }
+
+    private void createDirectories() throws IOException {
+        nioWrapper.createDirectories(nioWrapper.getPath(filePersistenceDirectory));
     }
 
     private Path getPathById(UUID id) {

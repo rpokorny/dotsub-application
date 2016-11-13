@@ -41,6 +41,19 @@ public class FileServiceImplTests {
     private static final String MOCK_EMPTY_DB_TEXT_NAME = "/MockEmptyDatabase.txt";
 
     @Test
+    public void testCreatesDirectory() throws IOException {
+        NioWrapper mockNioWrapper = mock(NioWrapper.class);
+        String path = "test/path";
+
+        when(mockNioWrapper.getPath(path)).thenReturn(Paths.get(path));
+
+        new FileServiceImpl(path, null, mockNioWrapper);
+
+        verify(mockNioWrapper).createDirectories(Paths.get(path));
+    }
+
+
+    @Test
     public void testList() throws IOException {
         InputStream mockDatabaseTextInput =
             this.getClass().getResourceAsStream(MOCK_DB_TEXT_NAME);
@@ -48,7 +61,9 @@ public class FileServiceImplTests {
         DSLContext mockJooqContext =
             DSL.using(new MockConnection(new MockFileDatabase(mockDatabaseTextInput)));
 
-        FileService service = new FileServiceImpl(null, mockJooqContext, null);
+        NioWrapper mockNioWrapper = mock(NioWrapper.class);
+
+        FileService service = new FileServiceImpl(null, mockJooqContext, mockNioWrapper);
 
         Collection<? extends IFileMetadata> retval = service.list();
 
@@ -197,7 +212,9 @@ public class FileServiceImplTests {
         DSLContext mockJooq = spy(
             DSL.using(new MockConnection(new MockFileDatabase(mockDatabaseTextInput))));
 
-        FileService service = new FileServiceImpl(null, mockJooq, null);
+        NioWrapper mockNioWrapper = mock(NioWrapper.class);
+
+        FileService service = new FileServiceImpl(null, mockJooq, mockNioWrapper);
 
         IFileMetadata retval = service.getMetadataById(id);
 
@@ -218,7 +235,9 @@ public class FileServiceImplTests {
         DSLContext mockJooq = spy(
             DSL.using(new MockConnection(new MockFileDatabase(mockDatabaseTextInput))));
 
-        FileService service = new FileServiceImpl(null, mockJooq, null);
+        NioWrapper mockNioWrapper = mock(NioWrapper.class);
+
+        FileService service = new FileServiceImpl(null, mockJooq, mockNioWrapper);
 
         IFileMetadata retval = service.getMetadataById(id);
     }

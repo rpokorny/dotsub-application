@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
+import java.nio.file.attribute.FileAttribute;
 
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class NioWrapper {
+    public Path createDirectories(Path dir, FileAttribute<?>... attrs) throws IOException {
+        return Files.createDirectories(dir, attrs);
+    }
+
     public Path write(Path path, byte[] bytes, OpenOption... options) throws IOException {
         return Files.write(path, bytes, options);
     }
