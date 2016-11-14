@@ -204,7 +204,7 @@ public class FileServiceImplTests {
 
     @Test
     public void testGetMetadataById() throws IOException {
-        UUID id = UUID.fromString("bd257178-7827-476a-91fb-e1ab1e8400f0");
+        UUID id = UUID.fromString("a25a0408-3526-4de8-82ee-7a74be2c3314");
 
         InputStream mockDatabaseTextInput =
             this.getClass().getResourceAsStream(MOCK_DB_TEXT_NAME);
@@ -219,15 +219,15 @@ public class FileServiceImplTests {
         IFileMetadata retval = service.getMetadataById(id);
 
         assertEquals(id, retval.getId());
-        assertEquals("titletitle", retval.getTitle());
+        assertEquals("title", retval.getTitle());
         assertEquals("description", retval.getDescription());
-        assertEquals("application/xhtml+xml", retval.getMediaType());
-        assertEquals("test.xhtml", retval.getFilename());
+        assertEquals("text/plain", retval.getMediaType());
+        assertEquals("bio.txt", retval.getFilename());
     }
 
     @Test(expected=NoSuchElementException.class)
     public void testGetMetadataByIdNoMatch() throws IOException {
-        UUID id = UUID.fromString("bd257178-7827-476a-91fb-e1ab1e8400f0");
+        UUID id = UUID.fromString("a25a0408-3526-4de8-82ee-7a74be2c3314");
 
         InputStream mockDatabaseTextInput =
             this.getClass().getResourceAsStream(MOCK_EMPTY_DB_TEXT_NAME);

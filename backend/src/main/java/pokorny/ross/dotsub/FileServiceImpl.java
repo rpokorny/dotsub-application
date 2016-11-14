@@ -61,7 +61,7 @@ public class FileServiceImpl implements FileService {
      * @return metadata about every file in the system
      */
     public Collection<? extends IFileMetadata> list() {
-        return jooq.selectFrom(FILE_METADATA).orderBy(FILE_METADATA.TITLE).fetch();
+        return jooq.selectFrom(FILE_METADATA).orderBy(FILE_METADATA.CREATION_DATE).fetch();
     }
 
     /**
@@ -82,7 +82,7 @@ public class FileServiceImpl implements FileService {
         nioWrapper.write(filePath, bytes,
             StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 
-        return record;
+        return getMetadataById(id);
     }
 
 
