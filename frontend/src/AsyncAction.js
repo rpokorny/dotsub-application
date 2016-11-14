@@ -2,11 +2,17 @@ import * as Kefir from 'kefir';
 import { handleFetchErrors, fetchStream } from './utils/FetchUtils';
 import * as Action from './Action';
 
-//this gets injected by webpack
-/* global API_ENTRY_URI */
 const apiEntryPoint = process.env.REACT_APP_BACKEND_URI,
     handleErrors = handleFetchErrors.bind(null, Action.SetErrorMessage);
 
+/**
+ * This module exports AsyncAction "constructors" - functions which create AsyncActions, where
+ * an AsyncAction is a function that takes the current model and returns a stream of models
+ */
+
+/**
+ * Load metadata on all existing files from the server
+ */
 export function LoadFiles() {
     return () => handleErrors(
         fetchStream(apiEntryPoint, undefined, undefined, 'application/json').map(Action.SetFiles)
