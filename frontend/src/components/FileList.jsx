@@ -4,7 +4,7 @@ import moment from 'moment';
 import './FileList.css';
 
 
-const formatDate = date => moment(date).utc().format('MM/DD/YY HH:mm:ss');
+const formatDate = date => moment(date).utc().format('MM/DD/YY HH:mm:ss') + ' UTC';
 
 const FileRow = ({file}) =>
     <tr>
