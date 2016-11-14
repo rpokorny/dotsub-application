@@ -8,7 +8,7 @@ select "FILE_METADATA"."ID", "FILE_METADATA"."TITLE", "FILE_METADATA"."DESCRIPTI
 > 5a9b5011-3e2b-4155-be47-bdf1c03a0447 Test2Title {null}      application/json test.json {null}
 @ rows: 2
 
-insert into "FILE_METADATA" ("TITLE", "DESCRIPTION", "MEDIA_TYPE", "FILENAME") values (?, ?, ?, ?);
+insert into "FILE_METADATA" ("ID", "TITLE", "DESCRIPTION", "MEDIA_TYPE", "FILENAME") values (?, ?, ?, ?, ?);
 > ID
 > ------------------------------------
 > a25a0408-3526-4de8-82ee-7a74be2c3314
