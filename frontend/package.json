@@ -9,6 +9,7 @@
     "immutable": "^3.8.1",
     "kefir": "^3.6.0",
     "moment": "^2.16.0",
+    "normalize.css": "^5.0.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "whatwg-fetch": "^1.0.0"

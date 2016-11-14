@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './UploadForm.css';
+
 import { ActionPool, AsyncActionPool } from '../Pools';
 import { SetUploadFilename, SetUploadTitle, SetUploadDescription } from '../Action';
 import { AddFile } from '../AsyncAction';
@@ -27,18 +29,16 @@ function onSubmit(evt) {
 }
 
 export default ({model}) =>
-    <form onSubmit={onSubmit}>
+    <form id="upload-form" onSubmit={onSubmit}>
         <label>
-            File:
-            <input type="file" value={model.filename} onChange={onFileChange} />
+            File: <input type="file" value={model.filename} onChange={onFileChange} />
         </label>
         <label>
-            Title:
-            <input type="text" value={model.title} onChange={onTitleChange} />
+            Title: <input type="text" value={model.title} onChange={onTitleChange} />
         </label>
         <label>
-            Description:
-            <input type="text" value={model.description} onChange={onDescriptionChange} />
+            Description: <input type="text" value={model.description}
+                onChange={onDescriptionChange} />
         </label>
-        <button disabled={!model.filename} type="submit">Upload</button>
+        <button disabled={!(model.filename && model.title.trim())} type="submit">Upload</button>
     </form>;

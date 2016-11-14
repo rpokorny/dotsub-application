@@ -24,7 +24,7 @@ const noError = model => model.set('errorMessage', null),
  */
 
 export function SetErrorMessage(error) {
-    const message = error instanceof Error ? error.message : error;
+    const message = (error instanceof Error ? error.message : error) || "Unknown Error";
 
     return model => model.set('errorMessage', message);
 }

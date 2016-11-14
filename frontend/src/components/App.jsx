@@ -6,6 +6,13 @@ import FileList from './FileList';
 
 export default ({model}) =>
     <main>
-        <UploadForm model={model.uploadModel} />
-        <FileList files={model.files} />
+        <header>
+            <h1>File Uploads</h1>
+        </header>
+        <section className="content">
+            {model.errorMessage && <div className="error">{model.errorMessage}</div>}
+            <UploadForm model={model.uploadModel} />
+            <hr/>
+            <FileList files={model.files} />
+        </section>
     </main>;

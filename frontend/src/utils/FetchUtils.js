@@ -59,9 +59,9 @@ export function getResponseError(errValue) {
         //Try to find a server-provided error message in the
         //JSON response body.  If that doesn't work, use the HTTP status text
         Kefir.fromPromise(errValue.json())
-            .map(json => json && json.error)
+            .map(json => json && json.message)
 
-            //if the error property was empty/null/undefined treat as stream error
+            //if the message property was empty/null/undefined treat as stream error
             .flatMap(errMsg => errMsg ? Kefir.constant(errMsg) : Kefir.constantError())
 
             //fall back to HTTP status text for any stream errors

@@ -1,8 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 
+import './FileList.css';
 
-const formatDate = date => moment(date).format('MM/DD/YY HH:MM:SS');
+
+const formatDate = date => moment(date).format('MM/DD/YY HH:mm:ss');
 
 const FileRow = ({file}) =>
     <tr>
@@ -17,7 +19,7 @@ export default function FileList({files}) {
     const fileEls = files.map((f, i) => <FileRow file={f} key={i} />);
 
     return (
-        <table>
+        <table id="file-list">
             <thead>
                 <tr>
                     <th>Title</th>

@@ -24,8 +24,8 @@ export function AddFile(file) {
         const formData = new FormData(),
             { uploadModel } = model;
 
-        formData.append("title", uploadModel.title);
-        formData.append("description", uploadModel.description);
+        formData.append("title", uploadModel.title.trim());
+        formData.append("description", uploadModel.description.trim());
         formData.append("file", file);
 
         return Kefir.concat([
