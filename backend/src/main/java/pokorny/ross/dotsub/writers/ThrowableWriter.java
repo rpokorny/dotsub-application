@@ -1,4 +1,4 @@
-package marketplace.rest.writer;
+package pokorny.ross.dotsub.writers;
 
 import java.util.Optional;
 import java.util.Map;
