@@ -1,4 +1,4 @@
-package pokorny.ross.dotsub;
+package pokorny.ross.dotsub.mappers;
 
 import java.util.NoSuchElementException;
 

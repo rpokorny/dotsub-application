@@ -1,4 +1,4 @@
-package pokorny.ross.dotsub;
+package pokorny.ross.dotsub.mappers;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
