@@ -21,7 +21,7 @@ simultaneously in order to have a functioning system
 
 ### Backend
 To run the backend in development mode, go into the `backend` directory and
-execte `./mvnw spring-boot:run`.  To build the backend, execute` ./mvnw clean
+execute `./mvnw spring-boot:run`.  To build the backend, execute` ./mvnw clean
 install`.  Once the backend is built, it can be executed  using `java -jar
 target/dotsub-application-1.0.0.jar`.
 
@@ -36,14 +36,15 @@ directory.  Note that if this directory does not already exist, the server must
 have write access to the current directory in order to create it.
 
 ### Frontend
-The frontend is a create-react-app application and can be built using the
+The frontend is a `create-react-app` application and can be built using the
 typical commands thereof.  To run it, first ensure that node.js and npm are
 installed.  The app has been tested on node 7.0.0 and npm 3.10.9.  Then before
 running other build commands, run `npm install` to download dependencies.
 
-To run the server in development mode, execute `npm start`.  To build the
-codebase, run `npm run build`.  The build code can be served using
-`pushstate-server`, which must be installed separately.
+To run the server in development mode, execute `npm start`.  Your browser should
+automatically open to the app; if it doesn't, the URL is
+`http://localhost:3000/`. To build the codebase, run `npm run build`.  The built
+code can be served using `pushstate-server`, which must be installed separately.
 
 Like the backend, the frontend includes automated unit tests.  These can be run
 using `npm test`.  Tests have been written to cover most of the code that is
@@ -52,7 +53,7 @@ been omitted.
 
 ## Design Considerations
 This application was written primarily using technologies and paradigms that I
-have gravitated towards over time.  Here I will explain the choices that I made:
+have gravitated towards over time.  Here I will explain the choices that I made.
 
 ### Backend
 * Spring - In its simplest usage, Spring is a dependency injection container.
@@ -60,10 +61,10 @@ have gravitated towards over time.  Here I will explain the choices that I made:
     particular, it is crucial when writing code that must undergo unit testing,
     as it allows classes to be used in isolation with controlled mocks filling
     in for their dependencies.
-* JAX-RS - JAX-RS is my preferred REST framework due to the way it allows APIs
-    to be specified declaratively and the way that it splits up resource
+* JAX-RS - JAX-RS is my preferred REST framework due to the way that it allows
+    APIs to be specified declaratively and the way that it splits up resource
     definition, exception handling, and representation reading and writing.
-* jOOQ - After years of experience with heavier ORMs such as hibernate, I have
+* jOOQ - After years of experience with heavier ORMs such as Hibernate, I have
     recently moved more towards "micro-ORMs" such as jOOQ.  jOOQ avoids the
     error-prone relationship abstractions offered by heavier tools and instead
     focuses on a very powerful, typesafe SQL DSL which allows the developer to
@@ -72,7 +73,7 @@ have gravitated towards over time.  Here I will explain the choices that I made:
 ### Frontend
 * Functional Reactive Programming using React, Kefir, and Immutable - I am a fan
     of functional programming and learned of the patterns for using functional
-    reactive programming in browser UIs several years ago.  I original learned
+    reactive programming in browser UIs several years ago.  I originally learned
     these patterns through the Elm language and saw that they could be cleanly
     adapted to JavaScript with the right library support.  Having already been
     familiar with React and Immutable, I selected Kefir as my FRP library and
@@ -88,7 +89,7 @@ codebase.  See the list below:
 
 1. Backend Integration Tests: Automated tests of the entire server running in a
 near-production state would be beneficial.  These could be written using either
-Spring Boot's testing framework or using an external tool such as JMeter.
+Spring Boot's testing framework or an external tool such as JMeter.
 2. Improved Error Messages: Backend validation errors currently produce
 relatively lengthy, SQL-oriented error messages.  More work could be done in
 order to catch the underlying exceptions and wrap them in something more
